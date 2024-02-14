@@ -1,0 +1,307 @@
+#reset-custom-post .inside {
+    max-width: 1280px;
+    display: flex;
+}
+
+#reset-custom-post .panel-form {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    padding: 20px 40px;
+    min-width: 50%;
+}
+#reset-custom-post .panel-form.loading::before {
+    content: "";
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+#reset-custom-post .panel-form>div {
+    margin: 20px 0;
+}
+
+#reset-custom-post #progress-bar-container {
+    width: 100%;
+    background-color: transparent;
+    border-radius: 4px;
+    margin: 10px 0;
+    height: 10px;
+    overflow: hidden;
+}
+
+#reset-custom-post #progress-bar {
+    width: 0;
+    height: 100%;
+    border-radius: 0;
+    background-color: #00ff2b;
+    transition: width 0.3s ease-in-out;
+}
+
+#reset-custom-post #log {
+    height: 380px;
+    overflow: auto;
+}
+
+#reset-custom-post #log>p {
+    color: #00ff2b;
+    margin: 0;
+    padding: 2px 0;
+}
+
+#reset-custom-post #log>strong {
+    font-weight: 700;
+}
+
+#reset-custom-post select {
+    border: 1px solid #CAD8EC !important;
+    box-shadow: 0px 2px 2px rgba(182, 181, 204, 0.25) !important;
+    border-radius: 6px !important;
+    height: 40px !important;
+    color: #2c3338 !important;
+    padding: 0 15px !important;
+    min-width: 300px;
+}
+
+#reset-custom-post .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#reset-custom-post .toggle-switch input[type="checkbox"] {
+    display: none;
+}
+
+#reset-custom-post .toggle-switch-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ddd;
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 2px #ccc;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#reset-custom-post .toggle-switch-handle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+#reset-custom-post .toggle-switch::before {
+    content: "";
+    position: absolute;
+    top: -13px;
+    right: -18px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #aaa;
+    text-shadow: 1px 1px #fff;
+    transition: color 0.3s ease-in-out;
+}
+
+#reset-custom-post .toggle-switch input[type="checkbox"]:checked+.toggle-switch-handle {
+    transform: translateX(23px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 3px #00ff2b;
+}
+
+#reset-custom-post .toggle-switch input[type="checkbox"]:checked+.toggle-switch-background {
+    background-color: #00ff2b;
+    box-shadow: inset 0 0 0 2px #00ff2b;
+}
+
+#reset-custom-post .toggle-switch input[type="checkbox"]:checked+.toggle-switch:before {
+    content: "On";
+    color: #00ff2b;
+    right: -7px;
+}
+
+#reset-custom-post .toggle-switch input[type="checkbox"]:checked+.toggle-switch-background .toggle-switch-handle {
+    transform: translateX(20px);
+}
+
+#reset-custom-post .terminal-loader {
+    border: 0.1em solid #333;
+    background-color: #1a1a1a;
+    color: #0f0;
+    font-size: 1em;
+    padding: 1.5em 1em;
+    width: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#reset-custom-post .terminal-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.5em;
+    background-color: #333;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 0 0.4em;
+    box-sizing: border-box;
+}
+
+#reset-custom-post .terminal-controls {
+    float: right;
+}
+
+#reset-custom-post .control {
+    display: inline-block;
+    width: 0.6em;
+    height: 0.6em;
+    margin-left: 0.4em;
+    border-radius: 50%;
+    background-color: #777;
+}
+#reset-custom-post .txt-total {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+#reset-custom-post .control.close {
+    background-color: #e33;
+}
+
+#reset-custom-post .control.minimize {
+    background-color: #ee0;
+}
+
+#reset-custom-post .control.maximize {
+    background-color: #0b0;
+}
+
+#reset-custom-post .terminal-title {
+    float: left;
+    line-height: 1.5em;
+    color: #eee;
+}
+
+#reset-custom-post .text {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#reset-custom-post .btn-reset {
+    width: auto;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    background: #e62222;
+    position: relative;
+    padding-right: 60px;
+    padding-left: 20px;
+}
+
+#reset-custom-post .btn-reset:disabled {
+    opacity: 0.5;
+    cursor:not-allowed;
+}
+
+#reset-custom-post .btn-reset,
+#reset-custom-post .btn-reset span {
+    transition: 200ms;
+}
+
+#reset-custom-post .btn-reset .btn-txt {
+    color: white;
+    font-weight: bold;
+}
+
+#reset-custom-post .btn-reset .icon {
+    position: absolute;
+    border-left: 1px solid #c41b1b;
+    right: 10px;
+    height: 30px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#reset-custom-post .btn-reset svg {
+    width: 15px;
+    fill: #eee;
+}
+
+#reset-custom-post .btn-reset:hover:enabled {
+    background: #ff3636;
+}
+
+#reset-custom-post .btn-reset:hover:enabled .btn-txt {
+    color: transparent;
+}
+
+#reset-custom-post .btn-reset:hover:enabled .icon {
+    width: calc(100% - 20px);
+    border-left: none;
+    transform: translateX(0);
+}
+
+#reset-custom-post .btn-reset:focus {
+    outline: none;
+}
+
+#reset-custom-post .btn-reset:active .icon svg {
+    transform: scale(0.8);
+}
+
+#reset-custom-post .rcpt-load {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
+}
+#reset-custom-post .rcpt-load.show {
+    opacity: 1;
+    visibility: visible;
+}
+#reset-custom-post .rcpt-loader {
+    
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: radial-gradient(farthest-side,#00ff2b 94%,#0000) top/9px 9px no-repeat,
+           conic-gradient(#0000 30%,#00ff2b);
+    -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
+    animation: spinner-c7wet2 1s infinite linear;
+ }
+ 
+ @keyframes spinner-c7wet2 {
+    100% {
+       transform: rotate(1turn);
+    }
+ }
