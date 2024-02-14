@@ -1,5 +1,5 @@
-
 <?php
+add_action('admin_menu', 'add_mlz_reset_cpt_options_page');
 function add_mlz_reset_cpt_options_page() {
     add_submenu_page(
         'tools.php',
