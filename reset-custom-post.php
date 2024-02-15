@@ -11,9 +11,11 @@ Text Domain: reset-custom-post
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+define( 'MLZ_VERSION', '1.0.0' );
+
 function enqueue_custom_scripts() {
-    wp_enqueue_style('reset-custom-post-css', plugins_url('assets/css/styles.css', __FILE__));
-    wp_enqueue_script('reset-custom-post-js', plugins_url('assets/js/scripts.js', __FILE__), array('jquery'), null, true);
+    wp_enqueue_style('reset-custom-post-css', plugins_url('assets/css/styles.css', __FILE__), array(), MLZ_VERSION );
+    wp_enqueue_script('reset-custom-post-js', plugins_url('assets/js/scripts.js', __FILE__), array('jquery'), MLZ_VERSION, true);
 }
 add_action('admin_enqueue_scripts', 'enqueue_custom_scripts');
 

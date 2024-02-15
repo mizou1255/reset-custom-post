@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
         var customPostType = $('#custom_post_type').val();
         var totalPosts = $(this).data('total');
         var deleteImages = $('#delete_images').prop('checked') ? 1 : 0;
-        var nonce = $(this).data('nonce');
+        var nonce = $('#nonce').val();
 
         function performmlz_reset_cpt(offset) {
             var data = {
@@ -54,10 +54,12 @@ jQuery(document).ready(function($) {
         }
 
         var imageId = imageIds[currentIndex];
+        var nonce = $('#nonce').val();
         var data = {
             'action': 'mlz_reset_cpt_image',
             'image_id': imageId,
-            'post_id': postId
+            'post_id': postId,
+            'nonce': nonce
         };
 
         $.ajax({
@@ -83,7 +85,7 @@ jQuery(document).ready(function($) {
     }
     $('#custom_post_type').on('change', function() {
         var customPostType = $(this).val();
-        var nonce = $(this).data('nonce');
+        var nonce = $('#nonce').val();
         loaderShow();
         $.ajax({
             url: ajaxurl,

@@ -38,7 +38,11 @@ function mlz_reset_cpt() {
     $post_title = get_the_title($post_id);
     $res = wp_delete_post( $post_id, true );
 
-    $log_message = __('The post <strong>'.$post_title.'</strong> - ID : <strong>'.$post_id .'</strong> is deleted', 'reset-custom-post');
+    $log_message = sprintf(
+        __('The post <strong>%s</strong> - ID : <strong>%s</strong> is deleted', 'reset-custom-post'),
+        $post_title,
+        $post_id
+    );
     echo json_encode(array( 'offset' => $offset, 'progress' => $progressPercentage, 'totalPosts' => $totalPosts, 'post_id' => $post_id , 'post_title' => $post_title, 'imagesIds' => $image_ids, 'log' => $log_message));
 
     ob_flush();
@@ -50,6 +54,13 @@ add_action('wp_ajax_mlz_reset_cpt_image', 'mlz_reset_cpt_image');
 add_action('wp_ajax_nopriv_mlz_reset_cpt_image', 'mlz_reset_cpt_image');
 
 function mlz_reset_cpt_image() {
+
+    $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
+    if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
+        echo json_encode(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
+        wp_die();
+    }
+    
     $image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
     $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
     
@@ -62,7 +73,11 @@ function mlz_reset_cpt_image() {
     //$delete_result = true;
 
     if ($delete_result !== false) {
-        $log_message = __('Image with ID <strong>'.$image_id.'<strong> from post <strong>'.$post_id.'<strong> is deleted', 'reset-custom-post');
+        $log_message = sprintf(
+            __('Image with ID <strong>%s</strong> from post <strong>%s</strong> is deleted', 'reset-custom-post'),
+            $image_id,
+            $post_id
+        );
         echo json_encode(array('post_id' => $post_id, 'image_id' => $image_id, 'image_title' =>  get_the_title($image_id), 'log' => $log_message));
     } else {
         echo json_encode(array('log' => __('Error deleting image', 'reset-custom-post') ));
@@ -92,8 +107,17 @@ function get_total_posts_callback() {
     if ($post_type_object) {
         $cpt = $post_type_object->labels->singular_name;
     }
+    $msg = sprintf(
+        __('Delete %d %s', 'reset-custom-post'),
+        $total_posts,
+        $cpt
+    );
+    $log_message = sprintf(
+        __('Custom post changed to <strong>%s</strong>', 'reset-custom-post'),
+        $cpt
+    );
 
-    echo json_encode(array('total' => $total_posts, 'msg' => __('Delete '.$total_posts.' ' .$cpt, 'reset-custom-post'), 'log' => __('Custom post changed to <strong>' .$cpt. '</strong> ', 'reset-custom-post') ));
+    echo json_encode(array('total' => $total_posts, 'msg' => $msg, 'log' => $log_message) );
 
     wp_die();
 }
