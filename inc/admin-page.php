@@ -16,6 +16,7 @@ function display_mlz_reset_cpt_options_page() {
     <div class="wrap" id="reset-custom-post">
         <h2>Reset CPT Options</h2>
         <form method="post" action="options.php">
+            <?php $nonce = wp_create_nonce( 'mlz_reset_cpt_nonce' ); ?>
             <div class="inside">
                 <div class="panel-form">
                     
@@ -28,7 +29,7 @@ function display_mlz_reset_cpt_options_page() {
                         $custom_post_type = get_option('custom_post_type');
                         $post_types = get_post_types(array('public' => true), 'objects');
                         ?>
-                        <select name="custom_post_type" id="custom_post_type" autocomplete="off">
+                        <select name="custom_post_type" id="custom_post_type" autocomplete="off" data-nonce="<?php echo esc_attr( $nonce ); ?>">
                             <option value=""><strong><?php _e('Select', 'reset-custom-post'); ?></strong></option>
                             <?php foreach ($post_types as $post_type) { ?>
                                 <option value="<?php echo $post_type->name; ?>">
@@ -42,7 +43,7 @@ function display_mlz_reset_cpt_options_page() {
                         $delete_images = get_option('delete_images'); ?>   
                         <strong><?php _e('Delete attachments images ?', 'reset-custom-post'); ?></strong>
                         <label class="toggle-switch">
-                            <input type="checkbox" name="delete_images" value="1" <?php checked($delete_images, 1); ?> />
+                            <input type="checkbox" name="delete_images" id="delete_images" value="1" <?php checked($delete_images, 1); ?> />
                             <div class="toggle-switch-background">
                                 <div class="toggle-switch-handle"></div>
                             </div>
@@ -51,7 +52,7 @@ function display_mlz_reset_cpt_options_page() {
                     </div>
                     <div>
                         <p class="txt-total"><strong><?php _e('Total:', 'reset-custom-post'); ?></strong> <span id="total-posts"></span></p>
-                        <button type="submit" name="submit" id="mlz_reset_cpt_button" class="btn-reset" data-total="" disabled>
+                        <button type="submit" name="submit" id="mlz_reset_cpt_button" class="btn-reset" data-total="" disabled  data-nonce="<?php echo esc_attr( $nonce ); ?>">
                             <span class="btn-txt"><?php _e('Delete', 'reset-custom-post'); ?></span>
                             <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span>
                         </button>

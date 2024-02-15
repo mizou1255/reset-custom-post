@@ -3,6 +3,12 @@
 add_action('wp_ajax_mlz_reset_cpt', 'mlz_reset_cpt');
 add_action('wp_ajax_nopriv_mlz_reset_cpt', 'mlz_reset_cpt');
 function mlz_reset_cpt() {
+
+    $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
+    if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
+        echo json_encode(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
+        wp_die();
+    }
     $custom_post_type = isset($_POST['custom_post_type']) ? sanitize_text_field($_POST['custom_post_type']) : '';
     $delete_images = isset($_POST['delete_images']) ? intval($_POST['delete_images']) : 0;
     $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
@@ -56,7 +62,7 @@ function mlz_reset_cpt_image() {
     //$delete_result = true;
 
     if ($delete_result !== false) {
-        $log_message = "<p>L'image avec l'ID <strong>$image_id</strong> du post <strong>$post_id</strong> est supprimée</p>";
+        $log_message = __('Image with ID <strong>'.$image_id.'<strong> from post <strong>'.$post_id.'<strong> is deleted', 'reset-custom-post');
         echo json_encode(array('post_id' => $post_id, 'image_id' => $image_id, 'image_title' =>  get_the_title($image_id), 'log' => $log_message));
     } else {
         echo json_encode(array('log' => __('Error deleting image', 'reset-custom-post') ));
@@ -69,6 +75,12 @@ add_action('wp_ajax_get_total_posts', 'get_total_posts_callback');
 add_action('wp_ajax_nopriv_get_total_posts', 'get_total_posts_callback');
 
 function get_total_posts_callback() {
+    $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
+    if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
+        echo json_encode(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
+        wp_die();
+    }
+
     $custom_post_type = isset($_POST['custom_post_type']) ? sanitize_text_field($_POST['custom_post_type']) : '';
     $args = array(
         'post_type' => $custom_post_type,

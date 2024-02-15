@@ -4,7 +4,8 @@ jQuery(document).ready(function($) {
         loaderShow();
         var customPostType = $('#custom_post_type').val();
         var totalPosts = $(this).data('total');
-        var deleteImages = $('#delete_images').is(':checked') ? 1 : 0;
+        var deleteImages = $('#delete_images').prop('checked') ? 1 : 0;
+        var nonce = $(this).data('nonce');
 
         function performmlz_reset_cpt(offset) {
             var data = {
@@ -12,7 +13,8 @@ jQuery(document).ready(function($) {
                 'custom_post_type': customPostType,
                 'totalPosts': totalPosts,
                 'delete_images': deleteImages,
-                'offset': offset
+                'offset': offset,
+                'nonce': nonce
             };
 
             $.ajax({
@@ -81,6 +83,7 @@ jQuery(document).ready(function($) {
     }
     $('#custom_post_type').on('change', function() {
         var customPostType = $(this).val();
+        var nonce = $(this).data('nonce');
         loaderShow();
         $.ajax({
             url: ajaxurl,
@@ -88,7 +91,8 @@ jQuery(document).ready(function($) {
             dataType: 'json',
             data: {
                 action: 'get_total_posts',
-                custom_post_type: customPostType
+                custom_post_type: customPostType,
+                'nonce': nonce
             },
             success: function(response) {
                 loaderHide();
