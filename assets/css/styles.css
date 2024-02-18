@@ -25,7 +25,7 @@
     z-index: 999;
 }
 
-#reset-custom-post .panel-form>div {
+#reset-custom-post .panel-form>div, .taxonomy_item {
     margin: 20px 0;
 }
 
@@ -48,6 +48,7 @@
 
 #reset-custom-post #log {
     height: 380px;
+    width: 100%;
     overflow: auto;
 }
 
@@ -74,6 +75,7 @@
 #reset-custom-post .toggle-switch {
     position: relative;
     display: inline-block;
+    margin-left: 10px;
     width: 40px;
     height: 20px;
     cursor: pointer;

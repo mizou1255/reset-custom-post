@@ -3,7 +3,7 @@
 Plugin Name: Reset Custom Post
 Plugin URI: https://shop.bettoumi.fr
 Description: The Reset custom post plugin deletes all data from a defined custom post, with the option of deleting images attached to the custom post type.
-Version: 1.0
+Version: 1.1
 Author: Moez BETTOUMI
 Author URI: https://moezbettoumi.fr
 License: GPLv2 or later

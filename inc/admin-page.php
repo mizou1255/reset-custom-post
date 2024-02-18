@@ -48,8 +48,8 @@ function display_mlz_reset_cpt_options_page() {
                                 <div class="toggle-switch-handle"></div>
                             </div>
                         </label>
-
                     </div>
+                    <div id="taxonomy-list"></div>
                     <div>
                         <p class="txt-total"><strong><?php esc_attr_e('Total:', 'reset-custom-post'); ?></strong> <span id="total-posts"></span></p>
                         <button type="submit" name="submit" id="mlz_reset_cpt_button" class="btn-reset" data-total="" disabled>

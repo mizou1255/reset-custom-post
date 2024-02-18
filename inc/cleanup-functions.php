@@ -23,6 +23,10 @@ function mlz_reset_cpt() {
     ) );
 
     if (empty($all_posts)) {
+        $log_message = sprintf(
+            __('Deletion  <strong>%s</strong> completed', 'reset-custom-post'),
+            $custom_post_type
+        );
         echo json_encode(array('progress' => 100, 'log' => __('Deletion completed', 'reset-custom-post')));
         wp_die();
     }
@@ -107,8 +111,14 @@ function get_total_posts_callback() {
     if ($post_type_object) {
         $cpt = $post_type_object->labels->singular_name;
     }
+    $taxonomies = get_object_taxonomies($custom_post_type, 'objects');
+    $list_taxo = [];
+    foreach ($taxonomies as $key => $taxonomy) {
+        $list_taxo[$key]['name'][] = $taxonomy->name;
+        $list_taxo[$key]['count'][]  = wp_count_terms($taxonomy->name);
+    }
     $msg = sprintf(
-        __('Delete %d %s', 'reset-custom-post'),
+        __('%d %s', 'reset-custom-post'),
         $total_posts,
         $cpt
     );
@@ -117,7 +127,40 @@ function get_total_posts_callback() {
         $cpt
     );
 
-    echo json_encode(array('total' => $total_posts, 'msg' => $msg, 'log' => $log_message) );
+    echo json_encode(array('total' => $total_posts, 'msg' => $msg, 'log' => $log_message, 'taxonomies' => $list_taxo) );
+
+    wp_die();
+}
+
+add_action('wp_ajax_delete_elements_taxonomy', 'delete_elements_taxonomy_callback');
+add_action('wp_ajax_nopriv_delete_elements_taxonomy', 'delete_elements_taxonomy_callback');
+function delete_elements_taxonomy_callback() {
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Permission denied');
+        echo json_encode(array('log' =>  __('Permission denied', 'reset-custom-post')) );
+    }
+
+    $taxonomy_name = isset($_POST['taxonomy_name']) ? sanitize_text_field($_POST['taxonomy_name']) : '';
+    
+    if (empty($taxonomy_name)) {
+        wp_send_json_error('Invalid taxonomy name');
+        echo json_encode(array('log' =>  __('Invalid taxonomy name', 'reset-custom-post')) );
+    }
+
+    $terms = get_terms(array(
+        'taxonomy' => $taxonomy_name,
+        'hide_empty' => false
+    ));
+    foreach ($terms as $term_id) {
+        wp_delete_term($term_id->term_id, $taxonomy_name);
+    }
+
+    $log_message = sprintf(
+        __('Elements of taxonomy <strong>%s</strong> deleted successfully', 'reset-custom-post'),
+        $taxonomy_name
+    );
+
+    echo json_encode(array('log' => $log_message, 'terms' => $terms) );
 
     wp_die();
 }
