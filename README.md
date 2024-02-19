@@ -16,6 +16,10 @@ The Reset custom post plugin deletes all data from a defined custom post, with t
   Got to Tools -> Reset CPT
   Select Your custom post type
 ```
+
+## Changelog
+- 1.1 : Add taxonomies list
+- 1.0 : release version
     
 ## Badges
 
