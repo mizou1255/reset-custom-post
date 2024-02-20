@@ -6,7 +6,7 @@ function mlz_reset_cpt() {
 
     $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
     if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
-        echo json_encode(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
+        wp_send_json_error(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
         wp_die();
     }
     $custom_post_type = isset($_POST['custom_post_type']) ? sanitize_text_field($_POST['custom_post_type']) : '';
@@ -47,7 +47,7 @@ function mlz_reset_cpt() {
         $post_title,
         $post_id
     );
-    echo json_encode(array( 'offset' => $offset, 'progress' => $progressPercentage, 'totalPosts' => $totalPosts, 'post_id' => $post_id , 'post_title' => $post_title, 'imagesIds' => $image_ids, 'log' => $log_message));
+    wp_send_json_success(array( 'offset' => $offset, 'progress' => $progressPercentage, 'totalPosts' => $totalPosts, 'post_id' => $post_id , 'post_title' => $post_title, 'imagesIds' => $image_ids, 'log' => $log_message));
 
     ob_flush();
     flush();
@@ -61,7 +61,7 @@ function mlz_reset_cpt_image() {
 
     $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
     if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
-        echo json_encode(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
+        wp_send_json_error(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
         wp_die();
     }
     
@@ -69,7 +69,7 @@ function mlz_reset_cpt_image() {
     $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
     
     if ($image_id <= 0) {
-        echo json_encode(array('log' => __('Invalid image ID', 'reset-custom-post') ));
+        wp_send_json_error(array('log' => __('Invalid image ID', 'reset-custom-post') ));
         wp_die();
     }
 
@@ -82,9 +82,9 @@ function mlz_reset_cpt_image() {
             $image_id,
             $post_id
         );
-        echo json_encode(array('post_id' => $post_id, 'image_id' => $image_id, 'image_title' =>  get_the_title($image_id), 'log' => $log_message));
+        wp_send_json_success(array('post_id' => $post_id, 'image_id' => $image_id, 'image_title' =>  get_the_title($image_id), 'log' => $log_message));
     } else {
-        echo json_encode(array('log' => __('Error deleting image', 'reset-custom-post') ));
+        wp_send_json_error(array('log' => __('Error deleting image', 'reset-custom-post') ));
     }
 
     wp_die();
@@ -96,7 +96,7 @@ add_action('wp_ajax_nopriv_get_total_posts', 'get_total_posts_callback');
 function get_total_posts_callback() {
     $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
     if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
-        echo json_encode(array('log' => __('Error: Nonce verification failed', 'reset-custom-post') ));
+        wp_send_json_error(array('log' => __('Error: Nonce verification failed', 'reset-custom-post')));
         wp_die();
     }
 
@@ -127,7 +127,7 @@ function get_total_posts_callback() {
         $cpt
     );
 
-    echo json_encode(array('total' => $total_posts, 'msg' => $msg, 'log' => $log_message, 'taxonomies' => $list_taxo) );
+    wp_send_json_success(array('total' => $total_posts, 'msg' => $msg, 'log' => $log_message, 'taxonomies' => $list_taxo));
 
     wp_die();
 }
@@ -135,16 +135,24 @@ function get_total_posts_callback() {
 add_action('wp_ajax_delete_elements_taxonomy', 'delete_elements_taxonomy_callback');
 add_action('wp_ajax_nopriv_delete_elements_taxonomy', 'delete_elements_taxonomy_callback');
 function delete_elements_taxonomy_callback() {
+
+    $nonce = isset($_POST['nonce']) ? $_POST['nonce'] : '';
+    if ( ! wp_verify_nonce( $nonce, 'mlz_reset_cpt_nonce' ) ) {
+        wp_send_json_error(array('log' => __('Error: Nonce verification failed', 'reset-custom-post')));
+        wp_die();
+        
+    }
+
     if (!current_user_can('manage_options')) {
-        wp_send_json_error('Permission denied');
-        echo json_encode(array('log' =>  __('Permission denied', 'reset-custom-post')) );
+        wp_send_json_error(array('log' => __('Invalid taxonomy name', 'reset-custom-post')));
+        wp_die();
     }
 
     $taxonomy_name = isset($_POST['taxonomy_name']) ? sanitize_text_field($_POST['taxonomy_name']) : '';
     
-    if (empty($taxonomy_name)) {
-        wp_send_json_error('Invalid taxonomy name');
-        echo json_encode(array('log' =>  __('Invalid taxonomy name', 'reset-custom-post')) );
+    if (empty($taxonomy_name && taxonomy_exists($taxonomy_name))) {
+        wp_send_json_error(array('log' => __('Invalid taxonomy name <b>' .$taxonomy_name. '</b>', 'reset-custom-post')));
+        wp_die();
     }
 
     $terms = get_terms(array(
@@ -160,7 +168,7 @@ function delete_elements_taxonomy_callback() {
         $taxonomy_name
     );
 
-    echo json_encode(array('log' => $log_message, 'terms' => $terms) );
+    wp_send_json_success(array('log' => $log_message, 'reset-custom-post'));
 
     wp_die();
 }

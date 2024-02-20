@@ -23,23 +23,24 @@ jQuery(document).ready(function($) {
                 data: data,
                 dataType: 'json',
                 success: function(response) {
-                    $('#log').append('<p>'+response.log+'</p>');
+                    $('#log').append('<p>'+response.data.log+'</p>');
                     $('#log').scrollTop($('#log')[0].scrollHeight);
-                    var postId = response.post_id;
-                    if (response.imagesIds !== undefined && response.imagesIds.length > 0) {
-                            mlz_reset_cptImages(postId, response.imagesIds, 0);
+                    var postId = response.data.post_id;
+                    if (response.data.imagesIds !== undefined && response.data.imagesIds.length > 0) {
+                            mlz_reset_cptImages(postId, response.data.imagesIds, 0);
                     } 
                     if (offset < totalPosts) {
-                        $('#progress-bar').css('width', response.progress + '%');
+                        $('#progress-bar').css('width', response.data.progress + '%');
                         performmlz_reset_cpt(offset+1);
                     } else {
                         $('#progress-bar').css('width', '100%');
                         loaderHide();
                     } 
                 },
-                error: function(response) {
+                error: function(xhr, status, error) {
+                    console.error(error);
                     loaderHide();
-                }
+                }  
             });
         }
 
@@ -68,10 +69,14 @@ jQuery(document).ready(function($) {
             data: data,
             dataType: 'json',
             success: function(response) {
-                $('#log').append('<p>'+response.log+'</p>');
+                $('#log').append('<p>'+response.data.log+'</p>');
                 $('#log').scrollTop($('#log')[0].scrollHeight);
                 mlz_reset_cptImages(postId, imageIds, currentIndex + 1);
-            }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                loaderHide();
+            }  
         });
     }
 
@@ -100,13 +105,13 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 loaderHide();
-                var taxonomies = response.taxonomies;
+                var taxonomies = response.data.taxonomies;
 
-                $('#log').append('<p>'+response.log+'</p>');
+                $('#log').append('<p>'+response.data.log+'</p>');
                 $('#log').scrollTop($('#log')[0].scrollHeight);
-                $('#total-posts').text(response.msg);
-                $('#mlz_reset_cpt_button').attr('data-total', response.total);
-                if (response.total == 0 && taxonomies == '') {
+                $('#total-posts').text(response.data.msg);
+                $('#mlz_reset_cpt_button').attr('data-total', response.data.total);
+                if (response.data.total == 0 && taxonomies == '') {
                     $('#mlz_reset_cpt_button').attr('disabled', true);
                 } else {
                     $('#mlz_reset_cpt_button').attr('disabled', false);
@@ -134,19 +139,22 @@ jQuery(document).ready(function($) {
                     });
                 }
             },
-            error: function(response) {
+            error: function(xhr, status, error) {
+                console.error(error);
                 loaderHide();
-            }
+            }                
         });
     });
 
     function deleteElementsTaxonomies() {
+        var nonce = $('#nonce').val();
         var taxonomiesChecked = $('.taxonomy_item input[type="checkbox"]:checked');
         taxonomiesChecked.each(function(index, element) {
             var taxonomyName = $(element).val();
             var data = {
                 action: 'delete_elements_taxonomy',
-                taxonomy_name: taxonomyName
+                taxonomy_name: taxonomyName,
+                nonce: nonce
             };
             $.ajax({
                 url: ajaxurl,
@@ -154,11 +162,15 @@ jQuery(document).ready(function($) {
                 data: data,
                 dataType: 'json',
                 success: function(response) {
-                    $('#log').append('<p>'+response.log+'</p>');
-                    $('#log').scrollTop($('#log')[0].scrollHeight);
+                    if(response.success) {
+                        $('#log').append('<p>'+response.data.log+'</p>');
+                        $('#log').scrollTop($('#log')[0].scrollHeight);
+                    } else {
+                        console.error(response.data);
+                    }
                 },
-                error: function(response) {
-                    console.error('Erreur lors de la suppression des éléments de la taxonomie ' + taxonomyName);
+                error: function(xhr, status, error) {
+                    console.error(error);
                 }
             });
         });
