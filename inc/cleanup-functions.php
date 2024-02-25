@@ -27,7 +27,7 @@ function mlz_reset_cpt() {
             __('Deletion  <strong>%s</strong> completed', 'reset-custom-post'),
             $custom_post_type
         );
-        echo json_encode(array('progress' => 100, 'log' => __('Deletion completed', 'reset-custom-post')));
+        wp_send_json_success(array('progress' => 100, 'log' => __('Deletion completed', 'reset-custom-post')));
         wp_die();
     }
     $progressPercentage = (($offset / $totalPosts) * 100);
